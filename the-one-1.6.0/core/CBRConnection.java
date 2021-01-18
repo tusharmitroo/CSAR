@@ -4,7 +4,9 @@
  */
 package core;
 
+import routing.EpidemicRouter;
 import routing.MessageRouter;
+import routing.SprayAndWaitRouter;
 
 /**
  * A constant bit-rate connection between two DTN nodes.
@@ -13,6 +15,7 @@ public class CBRConnection extends Connection {
 	private int speed;
 	private double transferDoneTime;
 	private double CTW = 360;
+	private double deltaT = 5000;
 
 	/**
 	 * Creates a new connection between nodes and sets the connection
@@ -33,6 +36,18 @@ public class CBRConnection extends Connection {
 		if(SimClock.getTime() > CTW) {
 			fromNode.encounters = 0;
 			CTW = CTW + SimClock.getTime();
+		}
+		int min=0;
+		//MessageRouter router;
+		if(SimClock.getTime() > deltaT) {
+			for(int i=0; i<2; i++) {
+				if(fromNode.data[i][(int) (fromNode.encounters*500/360.0)] < fromNode.data[min][(int) (fromNode.encounters*500/360.0)]) min = i;
+			}
+			System.out.print("Epidemic " + fromNode.data[0][(int) (fromNode.encounters*500/360.0)]);
+			System.out.println(" S&W " + fromNode.data[1][(int) (fromNode.encounters*500/360.0)]);
+			//if(min == 0) System.out.println("Epidemic");
+			//else System.out.println("S&W");
+			deltaT = deltaT + SimClock.getTime();
 		}
 		//toNode.encounters
 		
@@ -61,7 +76,7 @@ public class CBRConnection extends Connection {
 
 		this.msgFromNode = from;
 		Message newMessage = m.replicate();
-		System.out.println(m.toString() + " " + m.getProperty("protocol") + " " +  Math.floor(Double.parseDouble(m.getProperty("density").toString())) + " " + m.getProperty("overhead"));
+		//System.out.println(m.toString() + " " + m.getProperty("protocol") + " " +  Math.floor(Double.parseDouble(m.getProperty("density").toString())) + " " + m.getProperty("overhead"));
 		int retVal = getOtherNode(from).receiveMessage(newMessage, from);
 
 		if (retVal == MessageRouter.RCV_OK) {

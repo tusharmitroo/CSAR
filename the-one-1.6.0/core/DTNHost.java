@@ -34,9 +34,8 @@ public class DTNHost implements Comparable<DTNHost> {
 	private List<NetworkInterface> net;
 	private ModuleCommunicationBus comBus;
 	int encounters = 0;
-	private int act;
-	private double lastCWT;
-	private double currentTime;
+	double[][] data = new double[2][10];
+	int counter=0;
 
 	static {
 		DTNSim.registerForReset(DTNHost.class.getCanonicalName());
@@ -130,7 +129,7 @@ public class DTNHost implements Comparable<DTNHost> {
 	 * Set a router for this host
 	 * @param router The router to set
 	 */
-	private void setRouter(MessageRouter router) {
+	public void setRouter(MessageRouter router) {
 		router.init(this, msgListeners);
 		this.router = router;
 	}
@@ -452,6 +451,22 @@ public class DTNHost implements Comparable<DTNHost> {
 	 * {@link MessageRouter#receiveMessage(Message, DTNHost)}
 	 */
 	public int receiveMessage(Message m, DTNHost from) {
+		int routerUsed;
+		int context;
+		double metric;
+		
+		if(from.getRouter().getClass().getSimpleName().toString().compareTo("EpidemicRouter")==0) {
+			routerUsed = 0;
+			//System.out.println("yes");
+		}	
+		else routerUsed = 1;
+		context = (int) (Double.parseDouble(m.getProperty("density").toString()));
+		metric = this.data[routerUsed][context];
+		//System.out.print("old context: " + context + " metric: " +metric);
+		metric = (metric*this.counter + Integer.parseInt(m.getProperty("overhead").toString()))/(this.counter+1);
+		//System.out.println(" new context: " + context + " metric: " +metric);
+		data[routerUsed][context] = metric;
+		this.counter++;
 		int retVal = this.router.receiveMessage(m, from); 
 
 		if (retVal == MessageRouter.RCV_OK) {

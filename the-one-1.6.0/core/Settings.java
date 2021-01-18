@@ -358,6 +358,7 @@ public class Settings {
 	 * the namespaces
 	 */
 	public String getSetting(String name) {
+		
 		String fullPropName;
 		if (props == null) {
 			init(null);
@@ -384,7 +385,9 @@ public class Settings {
 			throw new SettingsError("Can't find setting " + 
 					getPropertyNamesString(name));
 		}
-		
+		int choice = (int) (Math.random()*2); 
+		String[] choosen = {"EpidemicRouter","SprayAndWaitRouter"};
+		if(name.compareTo("router")==0) return choosen[choice];
 		outputSetting(fullPropName + " = " + value);
 		return value;
 	}

@@ -78,7 +78,8 @@ public class Message implements Comparable<Message> {
 		this.properties = null;
 		this.appID = null;
 		this.addProperty("protocol", null);
-		this.addProperty("density", 0);
+		this.addProperty("density", null);
+		this.addProperty("overhead", null);
 		
 		Message.nextUniqueId++;
 		addNodeOnPath(from);
