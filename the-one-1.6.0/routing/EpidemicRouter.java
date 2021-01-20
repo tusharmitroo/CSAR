@@ -17,8 +17,20 @@ public class EpidemicRouter extends ActiveRouter {
 	 * the given Settings object.
 	 * @param s The settings object
 	 */
+	protected int initialNrofCopies;
+	protected boolean isBinary;
+
+	public static final String NROF_COPIES = "nrofCopies";
+	/** identifier for the binary-mode setting ({@value})*/ 
+	public static final String BINARY_MODE = "binaryMode";
+	/** SprayAndWait router's settings name space ({@value})*/ 
+	public static final String SPRAYANDWAIT_NS = "SprayAndWaitRouter";
+
 	public EpidemicRouter(Settings s) {
 		super(s);
+		Settings snwSettings = new Settings(SPRAYANDWAIT_NS);
+		initialNrofCopies = snwSettings.getInt(NROF_COPIES);
+		isBinary = snwSettings.getBoolean( BINARY_MODE);
 		//TODO: read&use epidemic router specific settings (if any)
 	}
 	
@@ -28,6 +40,8 @@ public class EpidemicRouter extends ActiveRouter {
 	 */
 	protected EpidemicRouter(EpidemicRouter r) {
 		super(r);
+		this.initialNrofCopies = r.initialNrofCopies;
+		this.isBinary = r.isBinary;
 		//TODO: copy epidemic settings here (if any)
 	}
 			

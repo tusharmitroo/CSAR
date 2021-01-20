@@ -19,17 +19,17 @@ import routing.util.RoutingInfo;
 public class DTNHost implements Comparable<DTNHost> {
 	private static int nextAddress = 0;
 	private int address;
-
+	public String grpid;
 	private Coord location; 	// where is the host
 	private Coord destination;	// where is it going
 
-	private MessageRouter router;
+	public MessageRouter router;
 	private MovementModel movement;
 	private Path path;
 	private double speed;
 	private double nextTimeToMove;
 	private String name;
-	private List<MessageListener> msgListeners;
+	public List<MessageListener> msgListeners;
 	private List<MovementListener> movListeners;
 	private List<NetworkInterface> net;
 	private ModuleCommunicationBus comBus;
@@ -59,6 +59,7 @@ public class DTNHost implements Comparable<DTNHost> {
 		this.comBus = comBus;
 		this.location = new Coord(0,0);
 		this.address = getNextAddress();
+		this.grpid = groupId;
 		this.name = groupId+address;
 		this.net = new ArrayList<NetworkInterface>();
 
@@ -133,6 +134,7 @@ public class DTNHost implements Comparable<DTNHost> {
 		router.init(this, msgListeners);
 		this.router = router;
 	}
+	
 
 	/**
 	 * Returns the router of this host

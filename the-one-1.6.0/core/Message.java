@@ -62,6 +62,7 @@ public class Message implements Comparable<Message> {
 	 * 	will be the same for all replicates of the message)
 	 * @param size Size of the message (in bytes)
 	 */
+	protected int initialNrofCopies;
 	public Message(DTNHost from, DTNHost to, String id, int size) {
 		this.from = from;
 		this.to = to;
@@ -80,6 +81,10 @@ public class Message implements Comparable<Message> {
 		this.addProperty("protocol", null);
 		this.addProperty("density", null);
 		this.addProperty("overhead", null);
+		Settings snwSettings = new Settings("SprayAndWaitRouter");
+		
+		initialNrofCopies = snwSettings.getInt("nrofCopies");
+		this.addProperty("SprayAndWaitRouter.copies", new Integer(initialNrofCopies));
 		
 		Message.nextUniqueId++;
 		addNodeOnPath(from);
@@ -285,11 +290,12 @@ public class Message implements Comparable<Message> {
 	 * @throws SimError if the message already has a value for the given key
 	 */
 	public void addProperty(String key, Object value) throws SimError {
-		if (this.properties != null && this.properties.containsKey(key)) {
-			/* check to prevent accidental name space collisions */
+		/* if (this.properties != null && this.properties.containsKey(key)) {
+			/* check to prevent accidental name space collisions 
 			throw new SimError("Message " + this + " already contains value " + 
 					"for a key " + key);
 		}
+		*/
 		
 		this.updateProperty(key, value);
 	}
