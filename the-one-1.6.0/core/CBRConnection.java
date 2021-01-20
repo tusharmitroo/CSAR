@@ -44,56 +44,22 @@ public class CBRConnection extends Connection {
 			for(int i=0; i<2; i++) {
 				if(fromNode.data[i][(int) (fromNode.encounters*500/360.0)] < fromNode.data[min][(int) (fromNode.encounters*500/360.0)]) min = i;
 			}
-			Settings s = new Settings("Group"+ fromNode.grpid);
-			if(min==0) {
-				System.out.print("original: " );
-				fromNode.getRouter().incomingMessages.entrySet().forEach(entry->{
-					System.out.print(fromNode.toString() + entry.getKey() + " " + entry.getValue() + " ");  
-				 });
-				
-				oldRouter = fromNode.getRouter();
-				oldRouter.incomingMessages = fromNode.getRouter().incomingMessages;
-				System.out.print("copied: ");
-				oldRouter.incomingMessages.entrySet().forEach(entry->{
-					System.out.print(fromNode.toString() +entry.getKey() + " " + entry.getValue()+ " ");  
-				 });
+			Settings s = new Settings("Group"+ fromNode.grpid);		
+			oldRouter = fromNode.getRouter();
+			if(min==0) {			
 				routerproto = (MessageRouter)s.createIntializedObject("routing." + "EpidemicRouter");
-				routerproto.init(fromNode, fromNode.msgListeners);
-				routerproto.incomingMessages = oldRouter.incomingMessages;
-				routerproto.messages = oldRouter.messages;
-				routerproto.deliveredMessages = oldRouter.deliveredMessages;
-				routerproto.blacklistedMessages = oldRouter.blacklistedMessages;
-				fromNode.router = routerproto;
-				System.out.print(fromNode.toString() +"Changed to Epidemic. After change: ");
-				fromNode.getRouter().incomingMessages.entrySet().forEach(entry->{
-					System.out.print(entry.getKey() + " " + entry.getValue());  
-				 });
-				 System.out.println();
+				System.out.println("Epidemic");
 			}
-			else {
-				System.out.print("original: " );
-				fromNode.getRouter().incomingMessages.entrySet().forEach(entry->{
-					System.out.print(fromNode.toString() + entry.getKey() + " " + entry.getValue() + " ");  
-				 });
-				oldRouter = fromNode.getRouter();
-				oldRouter.incomingMessages = fromNode.getRouter().incomingMessages;
-				System.out.print("copied: ");
-				oldRouter.incomingMessages.entrySet().forEach(entry->{
-					System.out.print(fromNode.toString() +entry.getKey() + " " + entry.getValue()+" ");  
-				 });
+			else {	
 				routerproto = (MessageRouter)s.createIntializedObject("routing." + "SprayAndWaitRouter");
-				routerproto.init(fromNode, fromNode.msgListeners);
-				routerproto.incomingMessages = oldRouter.incomingMessages;
-				routerproto.messages = oldRouter.messages;
-				routerproto.deliveredMessages = oldRouter.deliveredMessages;
-				routerproto.blacklistedMessages = oldRouter.blacklistedMessages;
-				fromNode.router = routerproto;
-				System.out.print(fromNode.toString() +"Changed to S&W. After change: ");
-				fromNode.getRouter().incomingMessages.entrySet().forEach(entry->{
-					System.out.print(entry.getKey() + " " + entry.getValue());  
-				 });
-				 System.out.println();
+				System.out.println("Spray and Wait");
 			}	
+			routerproto.init(fromNode, fromNode.msgListeners);
+			routerproto.incomingMessages = oldRouter.incomingMessages;
+			routerproto.messages = oldRouter.messages;
+			routerproto.deliveredMessages = oldRouter.deliveredMessages;
+			routerproto.blacklistedMessages = oldRouter.blacklistedMessages;
+			fromNode.router = routerproto;
 			//fromNode.setRouter(router);
 			//System.out.print("Epidemic " + fromNode.data[0][(int) (fromNode.encounters*500/360.0)]);
 			//System.out.println(" S&W " + fromNode.data[1][(int) (fromNode.encounters*500/360.0)]);
