@@ -35,19 +35,37 @@ public class CBRConnection extends Connection {
 		fromNode.encounters++;
 		if(SimClock.getTime() > CTW) {
 			fromNode.encounters = 0;
-			CTW = CTW + SimClock.getTime();
+			CTW = 360 + SimClock.getTime();
 		}
 		int min=0;
-		//MessageRouter router;
+		MessageRouter routerproto;
+		MessageRouter oldRouter;
 		if(SimClock.getTime() > deltaT) {
 			for(int i=0; i<2; i++) {
 				if(fromNode.data[i][(int) (fromNode.encounters*500/360.0)] < fromNode.data[min][(int) (fromNode.encounters*500/360.0)]) min = i;
 			}
-			System.out.print("Epidemic " + fromNode.data[0][(int) (fromNode.encounters*500/360.0)]);
-			System.out.println(" S&W " + fromNode.data[1][(int) (fromNode.encounters*500/360.0)]);
+			Settings s = new Settings("Group"+ fromNode.grpid);		
+			oldRouter = fromNode.getRouter();
+			if(min==0) {			
+				routerproto = (MessageRouter)s.createIntializedObject("routing." + "EpidemicRouter");
+				System.out.println("Epidemic");
+			}
+			else {	
+				routerproto = (MessageRouter)s.createIntializedObject("routing." + "SprayAndWaitRouter");
+				System.out.println("Spray and Wait");
+			}	
+			routerproto.init(fromNode, fromNode.msgListeners);
+			routerproto.incomingMessages = oldRouter.incomingMessages;
+			routerproto.messages = oldRouter.messages;
+			routerproto.deliveredMessages = oldRouter.deliveredMessages;
+			routerproto.blacklistedMessages = oldRouter.blacklistedMessages;
+			fromNode.router = routerproto;
+			//fromNode.setRouter(router);
+			//System.out.print("Epidemic " + fromNode.data[0][(int) (fromNode.encounters*500/360.0)]);
+			//System.out.println(" S&W " + fromNode.data[1][(int) (fromNode.encounters*500/360.0)]);
 			//if(min == 0) System.out.println("Epidemic");
 			//else System.out.println("S&W");
-			deltaT = deltaT + SimClock.getTime();
+			deltaT = 5000 + SimClock.getTime();
 		}
 		//toNode.encounters
 		

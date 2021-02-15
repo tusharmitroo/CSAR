@@ -53,7 +53,6 @@ Scenario.nrofHostGroups = 6
 
 # Common settings for all groups
 Group.movementModel = ShortestPathMapBasedMovement
-Group.router = SprayAndWaitRouter
 Group.bufferSize = 5M
 Group.waitTime = 0, 120
 # All nodes have the bluetooth interface
@@ -68,6 +67,7 @@ Group.nrofHosts = 40
 
 # group1 (pedestrians) specific settings
 Group1.groupID = p
+Group1.router = EpidemicRouter
 
 # group2 specific settings
 Group2.groupID = c
@@ -75,10 +75,14 @@ Group2.groupID = c
 Group2.okMaps = 1
 # 10-50 km/h
 Group2.speed = 2.7, 13.9
+Group2.router = SprayAndWaitRouter
+
 
 
 # another group of pedestrians
 Group3.groupID = w
+Group3.router = EpidemicRouter
+
 
 # The Tram groups
 Group4.groupID = t
@@ -92,6 +96,8 @@ Group4.nrofHosts = 2
 Group4.nrofInterfaces = 2
 Group4.interface1 = btInterface
 Group4.interface2 = highspeedInterface
+Group4.router = SprayAndWaitRouter
+
 
 Group5.groupID = t
 Group5.bufferSize = 50M
@@ -101,6 +107,8 @@ Group5.routeType = 2
 Group5.waitTime = 10, 30
 Group5.speed = 7, 10
 Group5.nrofHosts = 2
+Group5.router = EpidemicRouter
+
 
 Group6.groupID = t
 Group6.bufferSize = 50M
@@ -110,6 +118,8 @@ Group6.routeType = 2
 Group6.waitTime = 10, 30
 Group6.speed = 7, 10
 Group6.nrofHosts = 2
+Group6.router = SprayAndWaitRouter
+
 
 
 ## Message creation parameters 
@@ -158,8 +168,8 @@ Report.report2 = ContactTimesReport
 
 ## Default settings for some routers settings
 ProphetRouter.secondsInTimeUnit = 30
-SprayAndWaitRouter.nrofCopies = 6
-SprayAndWaitRouter.binaryMode = true
+SprayAndWaitRouter.nrofCopies = 10
+SprayAndWaitRouter.binaryMode = false
 
 ## Optimization settings -- these affect the speed of the simulation
 ## see World class for details.

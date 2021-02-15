@@ -82,13 +82,13 @@ public abstract class MessageRouter {
 	
 	private List<MessageListener> mListeners;
 	/** The messages being transferred with msgID_hostName keys */
-	private HashMap<String, Message> incomingMessages;
+	public HashMap<String, Message> incomingMessages;
 	/** The messages this router is carrying */
-	private HashMap<String, Message> messages; 
+	public HashMap<String, Message> messages; 
 	/** The messages this router has received as the final recipient */
-	private HashMap<String, Message> deliveredMessages;
+	public HashMap<String, Message> deliveredMessages;
 	/** The messages that Applications on this router have blacklisted */
-	private HashMap<String, Object> blacklistedMessages;
+	public HashMap<String, Object> blacklistedMessages;
 	/** Host where this router belongs to */
 	private DTNHost host;
 	/** size of the buffer */
